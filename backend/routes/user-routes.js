@@ -1,5 +1,5 @@
 const { userSignup, userLogin, newApplication, viewApplication, viewAllApplication } = require('../controllers/userController')
-const verifyToken = require('../middleware/verifyToken')
+const {verifyToken }= require('../middleware/verifyToken')
 
 const router = require('express').Router()
 

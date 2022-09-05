@@ -28,5 +28,22 @@ const verifyToken = async (req, res, next) => {
     }
 }
 
+const verifyAdminToken = (req, res, next) => {
+    try {
+        const adminToken = req.cookies.adminToken
+        if (!adminToken) {
+            res.status(403)
+            throw new Error('no token no authorization')
+        }
+        const verifyToken = jwt.verify(adminToken, process.env.JWT_SECRET, (err, admin) => {
+            (err) ? res.status(401).json({ message: "invalid token" }) :
+                req.admin = admin.email
+            next()
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err.message)
 
-module.exports = verifyToken
+    }
+}
+module.exports = {verifyToken , verifyAdminToken}

@@ -48,11 +48,36 @@ module.exports = {
 
     fetchAllApplication: async (req, res, next) => {
         try {
-            const fecthAllApps = await Application.find()
-                (fecthAllApps) ? res.status(200).json(this.fetchAllApplication) :
-                res.status(404).json({ message: "no data please login and try again" })
+            const fecthAllApps = (await Application.find({}))
 
+            await (!fecthAllApps) ?
+                res.status(404).json({ message: "no data please login and try again" }) :
+                res.status(200).json({ fecthAllApps })
 
+        } catch (err) {
+            console.log(err, 'err in admin view all');
+            res.status(500).json(err.message)
+        }
+    },
+
+    //METHOD PUT
+    //ROUTE /api/admin/update-appstatus
+
+    updateStatus: async (req, res, next) => {
+        try {
+            const appId = req.params.id
+            const { status } = req.body
+
+            if (!status) res.status(400).json({ message: "no status no update" })
+            const updateStatus = await Application.findByIdAndUpdate(appId,
+                {
+                    $set: { status: status }
+                }, {
+                new: true
+            })
+            // console.log(updateStatus)
+            updateStatus ? res.status(200).json(updateStatus) :
+                res.status(500).json({ message: "server down please try again late" })
         } catch (err) {
             console.log(err, 'err in admin view all');
             res.status(500).json(err.message)
