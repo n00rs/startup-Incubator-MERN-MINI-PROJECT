@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
-
+const Application = require("../models/applyFormModel")
+// const 
 module.exports = {
 
 
@@ -17,8 +18,11 @@ module.exports = {
                 throw new Error('invalid credentials')
             }
             if (email == adminEmail && password == adminPassword) {
+                if (req.cookies.adminToken)
+                    req.cookies.adminToken = ''
+
                 const token = jwt.sign({ email: adminEmail }, process.env.JWT_SECRET, { expiresIn: '1d' })
-                res.cookie('adminJwt', token, {
+                res.cookie('adminToken', token, {
                     path: '/',
                     httpOnly: true,
                     expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
@@ -26,7 +30,7 @@ module.exports = {
                 })
                 res.status(200).json({ token, email })
             } else {
-                
+
                 res.status(403)
                 throw new Error('id or password doesnt match')
 
@@ -37,8 +41,21 @@ module.exports = {
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(err.message)
         }
+    },
+
+    //METHOD GET 
+    //ROUTE /api/admin/all-applications
+
+    fetchAllApplication: async (req, res, next) => {
+        try {
+            const fecthAllApps = await Application.find()
+                (fecthAllApps) ? res.status(200).json(this.fetchAllApplication) :
+                res.status(404).json({ message: "no data please login and try again" })
 
 
+        } catch (err) {
+            console.log(err, 'err in admin view all');
+            res.status(500).json(err.message)
+        }
     }
-
 }
