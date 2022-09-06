@@ -58,17 +58,21 @@ module.exports = {
                 const token = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
 
                 console.log(token);
-                res.cookie(
-                    'userToken', token, {
-                    paht: '/',
-                    httpOnly: true,
-                    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-                    sameSite: 'lax',
-                    withCredentials: true
-
-                }
-                )
-                res.status(200).json({ checkUser, token })
+                res
+                    .cookie(
+                        'userToken', token, {
+                        paht: '/',
+                        httpOnly: true,
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+                        sameSite: 'lax',
+                        withCredentials: true
+                    })
+                    .cookie('tokenExist', true, {
+                        path: '/',
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+                        sameSite: 'lax',
+                    })
+                res.status(200).json({ login: true })
             }
             else {
                 res.status(403)
@@ -131,7 +135,7 @@ module.exports = {
             res.json(err.message)
         }
     },
-    
+
     //METHOD GET
     //ROUTE /api/users/view-application/:id
 
@@ -164,11 +168,29 @@ module.exports = {
                 res.status(400)
                 throw new Error('no user please login and try again')
             }
-            const fetchUserApps = await Application.find({'userDetails.userId':userId})
+            const fetchUserApps = await Application.find({ 'userDetails.userId': userId })
             res.status(200).json(fetchUserApps)
         } catch (err) {
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(err.message)
+        }
+    },
+
+
+    //METHOD delete
+    //ROUTE /api/users/logout
+
+    logout: (req, res, next) => {
+        try {
+            const cookie = req.headers.cookie
+            console.log(cookie);
+            //clearing token from cookies
+            res.clearCookie('userToken', { path: '/' })
+            res.clearCookie('tokenExist', { path: '/' })
+            res.status(200).json({ logout: true })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message:"failed to logout"})
         }
     }
 

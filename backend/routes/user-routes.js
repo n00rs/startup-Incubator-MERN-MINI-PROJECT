@@ -1,4 +1,4 @@
-const { userSignup, userLogin, newApplication, viewApplication, viewAllApplication } = require('../controllers/userController')
+const { userSignup, userLogin, newApplication, viewApplication, viewAllApplication, logout } = require('../controllers/userController')
 const {verifyToken }= require('../middleware/verifyToken')
 
 const router = require('express').Router()
@@ -13,7 +13,7 @@ router.get('/view-application/:id',verifyToken,viewApplication)
 
 router.get('/view-all',verifyToken,viewAllApplication)
 
-
+router.delete('/logout',verifyToken, logout)
 
 
 
