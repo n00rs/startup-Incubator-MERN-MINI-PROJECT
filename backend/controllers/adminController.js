@@ -22,12 +22,18 @@ module.exports = {
                     req.cookies.adminToken = ''
 
                 const token = jwt.sign({ email: adminEmail }, process.env.JWT_SECRET, { expiresIn: '1d' })
-                res.cookie('adminToken', token, {
-                    path: '/',
-                    httpOnly: true,
-                    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-                    sameSite: 'lax'
-                })
+                res
+                    .cookie('adminToken', token, {
+                        path: '/',
+                        httpOnly: true,
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+                        sameSite: 'lax'
+                    })
+                    .cookie('adminExist', true, {
+                        path: '/',
+                        sameSite: 'lax',
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+                    })
                 res.status(200).json({ token, email })
             } else {
 
@@ -81,6 +87,19 @@ module.exports = {
         } catch (err) {
             console.log(err, 'err in admin view all');
             res.status(500).json(err.message)
+        }
+    },
+    //METHOD DELETE
+    //ROUTE /api/admin/logout
+
+    adminLogout: (req, res, next) => {
+        try {
+            //clearing token from cookie
+            res.clearCookie('adminToken')
+            res.clearCookie('adminExist')
+            res.status(200).json({ logout: true })
+        } catch (error) {
+            res.status(500).json({ message: "failed to logout" })
         }
     }
 }
