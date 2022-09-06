@@ -28,7 +28,7 @@ const Header = () => {
                     </li>
                     <button onClick={()=>navigate('/signup')} >SIGNUP</button>
                 </ul>
-                <label for="nav-toggle" className="icon-burger">
+                <label htmlFor="nav-toggle" className="icon-burger">
                     <div className="line">LOGIN</div>
                     <div className="line">SIGNUP</div>
                     <div className="line"></div>

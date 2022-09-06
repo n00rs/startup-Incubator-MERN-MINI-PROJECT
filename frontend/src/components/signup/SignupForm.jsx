@@ -1,18 +1,28 @@
 // import { json } from 'body-parser'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { userSignup } from '../../apiService/apiService'
+import { authContext } from '../../context/context'
 // import { Toast } from 'react-toastify/dist/components'
 import { signupSchema } from '../../validations/signupValid'
+import Spinner from '../spinner/Spinner'
 import './Signup.scss'
 
 const SignupForm = () => {
-    const [userData, setUserData] = useState({
-        name: '',
-        email: "",
-        password: ""
-    })
+    const navigate = useNavigate()
+    const { setState, state } = useContext(authContext)
 
+    // console.log(setState, state);
+    const [isLoading, setIsLoading] = useState(false)
+const initialState ={
+    name: '',
+    email: "",
+    password: "",
+    confirmPassword: ""
+}
+    const [userData, setUserData] = useState(initialState)
+    const { name, email, password, confirmPassword } = userData
     const getUserData = (e) => {
 
         setUserData(prev => (
@@ -29,33 +39,38 @@ const SignupForm = () => {
         e.preventDefault()
         try {
             signupSchema.validate(userData, { abortEarly: false }).then((res) => {
-                // console.log(` ${res}result from form`);
-                // console.log(res)
-const {email, name, password} = res
-                userSignup({email, name, password})
+
+                const { email, name, password } = res
+                setIsLoading(true)
+                userSignup({ email, name, password }).then((res) => {
+                    setIsLoading(false)
+                    navigate('/login')
+                }).catch((err) => {
+                    console.log(err);
+                    setIsLoading(false)
+                    setUserData(initialState)
+                    toast.error(err.message)
+                })
+
             }).catch(err => {
                 console.log(err)
                 err.errors.map(error => toast.error(error))
             })
 
-            // const doValidate = signupSchema.validate(userData, { abortEarly: false })
-            // if (doValidate.catch) {
-
-            //     doValidate
-            // }
-            // console.log(`hi from cat`);
-            // const doSigup = userSignup(userData)
-
         } catch (error) {
             console.log(error);
         }
+    }
+
+    if (isLoading) {
+        return <Spinner />
     }
     return (
         <>
             <div className="login-box">
                 <div className="login-box-formbox">
                     <div className="login-box-signup">
-                        Already have an account? <a href="#">Login</a>
+                        Already have an account? <Link to="/login">Login</Link>
                     </div>
                     <div className="login-box-login">
                         <h1>Welcome </h1>
@@ -65,20 +80,20 @@ const {email, name, password} = res
                         <form onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="email"> Name</label>
-                                <input type="text" name="name" className="input-email" onChange={getUserData} />
+                                <input type="text" name="name" className="input-email" onChange={getUserData} value={name} />
                             </div>
                             <div>
                                 <label htmlFor="email"> E-Mail</label>
-                                <input type="email" name="email" className="input-email" onChange={getUserData} />
+                                <input type="email" name="email" className="input-email" onChange={getUserData} value={email} />
                             </div>
 
                             <div>
                                 <label htmlFor="password"> Password</label>
-                                <input type="password" name="password" className="input-password" onChange={getUserData} />
+                                <input type="password" name="password" className="input-password" onChange={getUserData} value={password} />
                             </div>
                             <div>
                                 <label htmlFor="password">Confirm Password</label>
-                                <input type="password" name="confirmPassword" className="input-password" onChange={getUserData} />
+                                <input type="password" name="confirmPassword" className="input-password" onChange={getUserData} value={confirmPassword} />
                             </div>
                             <div>
                                 <input type="submit" value="signup to account" className="btn" />
