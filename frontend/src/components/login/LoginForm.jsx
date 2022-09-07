@@ -6,28 +6,28 @@ import { loginSchema, } from '../../validations/signupValid'
 import '../signup/Signup.scss'
 import Spinner from '../spinner/Spinner'
 import { Cookies, useCookies } from "react-cookie";
-import { authContext } from '../../context/context'
+import { authContext, urlContext } from '../../context/context'
 
 const API_URL = '/api/users/'
 
-const LoginForm = () => {
+const LoginForm = ({ admin }) => {
+
+    if (admin) {
+
+        console.log(admin, 'admin');
+    }
     const navigate = useNavigate()
 
-    const { userExist } = useContext(authContext)
-    console.log(userExist);
-    // const [cookies] = useCookies([])
-    useEffect(() => {
-        userExist ? navigate('/') : navigate('/login')
 
-    }, [])
-
+    const { userExist, setUserExist, setAdminExist } = useContext(authContext)
+    const { API_URL } = useContext(urlContext)
 
     const initialState = {
         email: "",
         password: ""
     }
     const [userData, setUserData] = useState(initialState)
-    // const [is]
+
     const [isLoading, setIsLoading] = useState(false)
 
     const { email, password } = userData
@@ -39,8 +39,8 @@ const LoginForm = () => {
                 [e.target.name]: e.target.value
             }
         ))
-
     }
+    const url = admin ? API_URL.adminLogin : API_URL.userLogin
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -50,12 +50,14 @@ const LoginForm = () => {
 
             if (loginValidate) {
                 setIsLoading(true)
-                const loginApi = await axios.post('/api/users/login', loginValidate)
+
+                const loginApi = await axios.post(url, loginValidate)
 
                 if (loginApi.data.login) {
                     setIsLoading(false)
-                    navigate('/')
                     setUserData(initialState)
+                    admin ? navigate('/admin/dash') : navigate('/')
+                    admin ? setAdminExist(true) : setUserExist(true)
                 } else {
                     setIsLoading(false)
                     setUserData(initialState)
@@ -81,9 +83,12 @@ const LoginForm = () => {
         <>
             <div className="login-box">
                 <div className="login-box-formbox">
-                    <div className="login-box-signup">
-                        Don't have an account? <Link to='/signup'>Sign Up</Link>
-                    </div>
+                    {admin ? ('') : (
+
+                        <div className="login-box-signup">
+                            Don't have an account? <Link to='/signup'>Sign Up</Link>
+                        </div>
+                    )}
                     <div className="login-box-login">
                         <h1>Welcome </h1>
                         <p>
@@ -99,13 +104,17 @@ const LoginForm = () => {
                                 <input type="password" name="password" className="input-password" onChange={getValues} value={password} />
                             </div>
                             <div>
-                                <input type="submit" value="Login to account" className="btn" />
+                                {admin ? (
+                                    <input type="submit" value='Login as admin' className="BTN" />
+                                ) : (
+                                    <input type="submit" value='Login to account' className="BTN" />
+                                )}
                             </div>
                         </form>
 
                     </div>
                 </div>
-                <div className="login-box-quotebox">
+                {(!admin) ? (<div className="login-box-quotebox">
                     <div className="quote-container">
                         <div className="quote">Make a Dream.</div>
                         <div className="quote-small">
@@ -113,7 +122,8 @@ const LoginForm = () => {
                             repellendus cumque voluptatum animi, illum veniam?"
                         </div>
                     </div>
-                </div>
+                </div>) : ('')}
+
             </div>
         </>
 

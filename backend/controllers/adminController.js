@@ -34,7 +34,7 @@ module.exports = {
                         sameSite: 'lax',
                         expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
                     })
-                res.status(200).json({ token, email })
+                res.status(200).json({ login: true })
             } else {
 
                 res.status(403)
@@ -89,6 +89,7 @@ module.exports = {
             res.status(500).json(err.message)
         }
     },
+    
     //METHOD DELETE
     //ROUTE /api/admin/logout
 

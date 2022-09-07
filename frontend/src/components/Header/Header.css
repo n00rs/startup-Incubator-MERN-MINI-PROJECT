@@ -1,4 +1,4 @@
-.container {
+.containers {
     position: fixed;
     top: 0px;
     left: 0px;
@@ -9,7 +9,7 @@
     align-items: center;
   }
   @media screen and (max-width: 1024px) {
-    .container {
+    .containers {
       position: fixed;
       top: 0px;
       left: 0px;

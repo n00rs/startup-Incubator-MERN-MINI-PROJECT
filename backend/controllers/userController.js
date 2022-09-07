@@ -85,6 +85,32 @@ module.exports = {
         }
     },
 
+    //METHOD GET
+    //ROUTE /api/user/user
+
+    fetchUser: async (req, res, next) => {
+        try {
+            console.log(req);
+            const userId = req.userId
+            if (!userId) {
+                res.status(403)
+                throw new Error('no token no authorization')
+            }
+            const user = await User.findById(userId, '-password')
+            console.log(user)
+            if (!user) {
+                res.status(404)
+                throw new Error('user not found')
+            }
+            res.status(200).json(user)
+        } catch (err) {
+            let statusCode = res.statusCode ? res.statusCode : 500
+            res.status(statusCode).json(err.message)
+        }
+    },
+
+
+
     //METHOD POST 
     //ROUTE /api/user/apply
 
@@ -190,7 +216,7 @@ module.exports = {
             res.status(200).json({ logout: true })
         } catch (error) {
             console.log(error);
-            res.status(500).json({message:"failed to logout"})
+            res.status(500).json({ message: "failed to logout" })
         }
     }
 
