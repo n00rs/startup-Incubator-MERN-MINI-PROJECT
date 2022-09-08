@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import { AuthContext, UrlContext } from "./context/context";
 import LandingPage from "./pages/LandingPage";
 import AdminDash from "./pages/AdminDash";
+import { NewApplication } from "./pages/NewApplication";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<LandingPage />} />
+            <Route path="/new-application" element={<NewApplication />} />
           </Routes>
           <ToastContainer />
           <Footer />

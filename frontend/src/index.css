@@ -5,3 +5,8 @@
 /* body{
   background-color: rgb(31, 31, 31)
 } */
+.error{
+  position: absolute;
+  color: rgb(224, 4, 4);
+  
+}

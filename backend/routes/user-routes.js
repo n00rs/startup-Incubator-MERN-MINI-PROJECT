@@ -1,4 +1,4 @@
-const { userSignup, userLogin, newApplication, viewApplication, viewAllApplication, logout, fetchUser } = require('../controllers/userController')
+const { userSignup, userLogin, newApplication, viewApplication, viewAllApplication, logout, fetchUser, upload,  } = require('../controllers/userController')
 const {verifyToken }= require('../middleware/verifyToken')
 
 const router = require('express').Router()
@@ -9,7 +9,7 @@ router.post('/login', userLogin)
 
 router.delete('/logout',verifyToken, logout)
 
-router.post('/apply',verifyToken,newApplication)
+router.post('/apply',verifyToken,upload.single("companyLogo"),newApplication)
 
 router.get('/view-application/:id',verifyToken,viewApplication)
 

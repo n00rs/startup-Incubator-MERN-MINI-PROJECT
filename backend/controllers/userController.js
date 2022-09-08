@@ -3,9 +3,23 @@ const mongoose = require('mongoose')
 const User = require('../models/userModel')
 const bcrypt = require('bcryptjs')
 const Application = require('../models/applyFormModel')
+const multer = require('multer')
+// const upload = multer({dest: '../../frontend/public/images/companyLogo'}).single('companyLogo')
+// const av = require('../../frontend/public/images/companyLogo') 
 
 
+const Storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+
+        cb(null, './frontend/public/images/companyLogo')
+    },
+    filename: (req, file, cb) => {
+        console.log(req.file, file);
+        cb(null, file.originalname)
+    }
+})
 module.exports = {
+    upload: multer({ storage: Storage }),
 
     //METHOD POST
     //ROUTE /api/users/signup
@@ -90,7 +104,6 @@ module.exports = {
 
     fetchUser: async (req, res, next) => {
         try {
-            console.log(req);
             const userId = req.userId
             if (!userId) {
                 res.status(403)
@@ -116,15 +129,15 @@ module.exports = {
 
 
     newApplication: async (req, res, next) => {
+
         try {
             const userId = req.userId
-            //checking whther userExist
             const userExist = await User.findById(userId)
             if (!userExist) {
                 res.status(422)
                 throw new Error('no user please login or signup')
             }
-
+            console.log(req.body);
             const data = { ...req.body }
 
             //setting user Details
@@ -148,12 +161,13 @@ module.exports = {
                 revenueModel: data.revenueModel,
                 marketSize: data.marketSize,
                 incubationType: data.incubationType,
-                businessProposal: data.businessProposal
+                businessProposal: data.businessProposal,
+                companyLogo: req.file.filename
             }
 
             let applicationData = { userDetails, companyDetails }
             const newApplication = await Application.create(applicationData)
-            res.status(201).json({ message: "form submitted succesfully", appId: newApplication._id })
+            res.status(201).json({  formSubmitted:true })
 
         } catch (err) {
             const statusCode = res.statusCode ? res.statusCode : 500
@@ -208,9 +222,9 @@ module.exports = {
 
     logout: (req, res, next) => {
         try {
-            const cookie = req.headers.cookie
-            console.log(cookie);
-            //clearing token from cookies
+            // const cookie = req.headers.cookie
+            // console.log(cookie);
+            // //clearing token from cookies
             res.clearCookie('userToken', { path: '/' })
             res.clearCookie('tokenExist', { path: '/' })
             res.status(200).json({ logout: true })
