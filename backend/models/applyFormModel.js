@@ -39,6 +39,9 @@ const applicationFormSchema = new Schema({
         companyName: {
             type: String,
             required: true
+        }, companyLogo: {
+            type: String,
+            required: true
         },
         teamBackground: {
             type: String,

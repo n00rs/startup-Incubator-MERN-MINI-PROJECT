@@ -41,7 +41,7 @@ module.exports = {
             const hashPassword = bcrypt.hashSync(password)
             const newUser = new User({ name, email, password: hashPassword })
             await newUser.save()
-            res.status(200).json({ message: "signup Successfully", newUser })
+            res.status(200).json({signup:true, newUser })
 
         } catch (err) {
             console.log(err + 'error in signup');
@@ -222,12 +222,13 @@ module.exports = {
 
     logout: (req, res, next) => {
         try {
-            // const cookie = req.headers.cookie
-            // console.log(cookie);
+            
             // //clearing token from cookies
+
             res.clearCookie('userToken', { path: '/' })
             res.clearCookie('tokenExist', { path: '/' })
             res.status(200).json({ logout: true })
+            
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "failed to logout" })

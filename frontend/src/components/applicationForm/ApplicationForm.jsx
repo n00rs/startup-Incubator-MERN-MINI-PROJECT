@@ -8,7 +8,6 @@ import { urlContext } from '../../context/context';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Spinner from '../spinner/Spinner';
-// import {  } from "";
 
 
 
@@ -24,7 +23,7 @@ const ApplicationForm = () => {
                 <img src="/images/IncubatorPage_banner_v2.gif" style={{ width: "100% " }} className="img-fluid" />
             </div>
             <div className="container  p-5">
-                <p className="fs-6 text-black">Need to get in touch with us? Choose the reason below and fill out the form. <br />
+                <p className="fs-6 text-black">Need to get in touch with us?  fill out the form. <br />
                     It will help us get your question to the right team and get back to you sooner. <br />
                     You can reach us via Live Chat Mon-Fri from 11am – 3pm PST (Pacific Standard Time) or call us toll free
                     Mon-Fri from 8am – 4pm PST at (949) 625-0412. For all After Sales/Warranty/Repairs call (949) 645-9500.</p>

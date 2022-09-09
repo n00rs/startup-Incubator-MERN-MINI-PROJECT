@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400;600;700&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400;600;700&display=swap");
 
 $clr-bg-main: #ebeef7;
 $clr-bg-box: #ffffff;
@@ -13,19 +13,19 @@ $clr-accent: #93f8e0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 14px;
-  color: $clr-text-main;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  padding: 2.5em;
-  background-color: $clr-bg-main;
-  margin-top: 180px;
-}
+// body {
+//   font-family: "Source Sans Pro", sans-serif;
+//   font-size: 14px;
+//   color: $clr-text-main;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   min-height: 100vh;
+//   margin: 0;
+//   padding: 2.5em;
+//   background-color: $clr-bg-main;
+//   margin-top: 180px;
+// }
 
 h1 {
   font-size: 2.5em;

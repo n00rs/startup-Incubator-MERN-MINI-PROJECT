@@ -76,9 +76,15 @@ const Header = ({ admin }) => {
                         <ul className="links">
 
                             <li className="list">
-                                <a href="">Home</a>
+                                <Link to='/' >Home</Link>
                                 <div className="home_underline"></div>
                             </li>
+                             
+                            <li className="list">
+                                <Link to='/view-application' >View Application</Link>
+                                <div className="home_underline"></div>
+                            </li>
+
                             <li className="list">
                                 <Link to='/new-application' >New Application</Link>
                                 <div className="home_underline"></div>

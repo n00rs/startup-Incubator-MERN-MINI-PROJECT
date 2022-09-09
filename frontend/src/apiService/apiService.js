@@ -11,8 +11,8 @@ export const userSignup = (userData) => {
             console.log(res, 'res from signup')
                 (res.status == 200) ? resolve() : reject({ message: 'failed to signup' })
         }).catch(err => {
-            reject({ message: err.response.data })
             console.log(err, 'err from signup');
+            reject({ message: err.response.data })
 
         })
     })
