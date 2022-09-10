@@ -1,13 +1,13 @@
 import React from 'react'
 import Header from '../components/Header/Header'
-import Table from '../components/table/Table'
+import ViewApplications from '../components/table/ViewApplication'
 
 const ViewApplication = () => {
 
   return (
     <div>
         <Header  /> 
-        <Table />
+        <ViewApplications />
     </div>
   )
 }

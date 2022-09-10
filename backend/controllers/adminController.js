@@ -82,14 +82,14 @@ module.exports = {
                 new: true
             })
             // console.log(updateStatus)
-            updateStatus ? res.status(200).json(updateStatus) :
+            updateStatus ? res.status(200).json({ updated: true, updateStatus }) :
                 res.status(500).json({ message: "server down please try again late" })
         } catch (err) {
             console.log(err, 'err in admin view all');
             res.status(500).json(err.message)
         }
     },
-    
+
     //METHOD DELETE
     //ROUTE /api/admin/logout
 
