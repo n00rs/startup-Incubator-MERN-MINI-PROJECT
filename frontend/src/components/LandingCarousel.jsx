@@ -1,5 +1,5 @@
 import React from 'react'
-import Table from './table/ViewApplication'
+// import Table from './table/ViewApplication'
 
 const LandingCarousel = () => {
     return (

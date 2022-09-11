@@ -46,8 +46,9 @@ const ViewApplication = () => {
                                                 <TextRow style={app.status === 'pending' || app.status == 'rejected' ? 'text-danger' : 'text-success'} title='Status' field={app.status} />
                                                 <TextRow title='Company Logo' logo={app.companyDetails.companyLogo} />
                                                 <TextRow title='Applied At' field={new Date(app.createdAt).toDateString()} />
+                                                <TextRow title='Alloted Day' field={app.allotedDay ? new Date(app.allotedDay).toDateString() : `application is pending`} />
                                                 <TextRow title='Slot' field={app.slotId ? app.slotId : `application is pending`} />
-                                                <TextRow title='Slot No.' field={app.slotNumber ? app.slotNumber : `no application is pending`} />
+                                                <TextRow title='Slot No.' field={app.slotSection ? app.slotSection : `no application is pending`} />
                                                 <TextRow title='Company' field={app.companyDetails.companyName} />
                                                 <TextRow title='Products' field={app.companyDetails.companyProducts} />
                                                 <TextRow title='Email' field={app?.userDetails?.email ? app.userDetails.email : ''} />

@@ -45,14 +45,14 @@ const ApplicationForm = () => {
                         teamBackground: '',
                         uniqueSolution: '',
                         incubationType: '',
-                        companyLogo:''
+                        companyLogo: ''
 
                     }}
                     validationSchema={applicationSchema}
-                   
+
                     onSubmit={
 
-                        async (values,onSubmitProps) => {
+                        async (values, onSubmitProps) => {
 
                             try {
                                 const body = new FormData()
@@ -62,7 +62,7 @@ const ApplicationForm = () => {
                                 // body.append('companyLogo', companyLogo)
                                 let submitForm = await axios.post(API_URL.userNewApplication, body, { withCredentials: true, 'Content-Type': `multipart/form-data` })
                                 console.log(submitForm, 'form submiited');
-                                if(submitForm.data.formSubmitted){
+                                if (submitForm.data.formSubmitted) {
                                     navigate('/')
                                     onSubmitProps.setSubmitting(false)
                                 }
@@ -75,9 +75,9 @@ const ApplicationForm = () => {
                         }
                     }
                 >
-                    {formik => (formik.isSubmitting)?(<Spinner />) : (
-                    //    { :('') }
-                        <Form onSubmit={(e)=>{
+                    {formik => (formik.isSubmitting) ? (<Spinner />) : (
+                
+                        <Form onSubmit={(e) => {
                             e.preventDefault()
                             formik.handleSubmit()
                         }} >
@@ -98,13 +98,13 @@ const ApplicationForm = () => {
                                     <TextField type="text" label='COMPANY NAME' name='companyName' id="companyName" />
                                     <div className="form-floating col-md">
                                         <div className="text-black">
-                                            <input onChange={(e) => formik.setFieldValue('companyLogo',e.target.files[0])}
+                                            <input onChange={(e) => formik.setFieldValue('companyLogo', e.target.files[0])}
                                                 type='file' className="form-control" id="companyLogo" name='companyLogo' hidden />
                                             <label htmlFor="companyLogo">
-                                                
+
                                                 <ErrorMessage name='companyLogo' className='text-danger' component='div' />
-                                                <img src={formik.values.companyLogo ? URL.createObjectURL(formik.values.companyLogo) : "/images/companyLogoalt.png"} 
-                                                style={{ widht: '50px', height: '50px' }} alt="" id='companyLogo' name='companyLogo' />
+                                                <img src={formik.values.companyLogo ? URL.createObjectURL(formik.values.companyLogo) : "/images/companyLogoalt.png"}
+                                                    style={{ widht: '50px', height: '50px' }} alt="" id='companyLogo' name='companyLogo' />
                                                 Choose a logo
                                             </label>
                                         </div>

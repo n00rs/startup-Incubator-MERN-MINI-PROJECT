@@ -2,6 +2,9 @@ import React, { useContext } from 'react'
 import { Button, Modal } from "react-bootstrap";
 import { ApplicationContext } from '../../context/context';
 import TextRow from '../TextRow';
+
+
+
 const ViewEachApp = ({ showModal, setShowModal, id }) => {
 
     const { applications } = useContext(ApplicationContext)
@@ -42,7 +45,7 @@ const ViewEachApp = ({ showModal, setShowModal, id }) => {
                                     <TextRow title= 'Bussiness Propasal' field={app?.companyDetails?.businessProposal && app.companyDetails.businessProposal} />
                                     {/* <TextRow title= ''/> */}
                                     {/* <TextRow title='Slot' field={app.slotId ? app.slotId : `application is pending`} />
-                                    <TextRow title='Slot No.' field={app.slotNumber ? app.slotNumber : `no application is pending`} /> */}
+                                    <TextRow title='Slot No.' field={app.slotSection ? app.slotSection : `no application is pending`} /> */}
                                 </div>
                             </div>
                         </div>

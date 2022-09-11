@@ -32,8 +32,8 @@ export const applicationSchema = yup.object().shape({
         .max(20, 'please enter a valid name below 20 characters or short form '),
 
     city: yup.string()
-        .required('please enter city details').
-        min(2, 'please enter a valid city name more than 2 charaters')
+        .required('please enter city details')
+        .min(2, 'please enter a valid city name more than 2 charaters')
         .max(20, 'please enter a valid city name '),
 
     name: yup.string()
@@ -46,8 +46,8 @@ export const applicationSchema = yup.object().shape({
         .max(20, 'enter a valid state below 20 characters'),
 
     email: yup.string().required('enter your email').email('enter a valid email'),
-    phone: yup.string().required('please enter your phone numer').matches('[0-9]{10}', 'please enter a 10 didgit number') ,
-        // .min(10, 'please enter a valid number without country code').max(10, 'please enter a valid number without country code'),
+    phone: yup.string().required('please enter your phone numer').matches('[0-9]{10}', 'please enter a 10 didgit number'),
+    // .min(10, 'please enter a valid number without country code').max(10, 'please enter a valid number without country code'),
 
     businessProposal: yup.string().required('please enter your bussiness propsal').min(10, 'atleast 10 characters'),
     companyProducts: yup.string().required('please enter your company Products').min(10, 'atleast 10 characters'),
@@ -57,5 +57,20 @@ export const applicationSchema = yup.object().shape({
     teamBackground: yup.string().required('whats your team or company background').min(10, 'atleast 10 characters'),
     uniqueSolution: yup.string().required('please enter your solution to problem').min(10, 'atleast 10 characters'),
     incubationType: yup.string().required('please select yout incubation type'),
-    companyLogo:yup.mixed().required('please select an image')
+    companyLogo: yup.mixed().required('please select an image')
+})
+
+//slot adding validation
+const oneDay = 60 * 60 * 24 * 1000
+
+export const addSlotSchema = yup.object().shape({
+    date: yup.date().min(new Date(), 'please choose a future date').max(new Date(Date.now() +7*oneDay), 'please choose a date b/w 7 days'),
+    section: yup.string().required('please select a section Slot')
+})
+
+
+//slot aLloting validation
+
+export const allotSlotSchema = yup.object().shape({
+    applicationId : yup.string().required('please select -_-')
 })

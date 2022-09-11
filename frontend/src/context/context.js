@@ -41,8 +41,12 @@ export const UrlContext = ({ children }) => {
         adminLogin: '/api/admin/login',
         adminLogout: '/api/admin/logout',
         adminViewAllApps: '/api/admin/all-applications',
-        adminUpdateStatus: '/api/admin/update-appstatus/'
+        adminUpdateStatus: '/api/admin/update-appstatus/',
+        adminFetchSlots:'/api/admin/slots-available',
+        adminAddSlot:'/api/admin/addSlot',
+        adminAllotSlot: '/api/admin/allot-slot'
     }
+
     return (
         <urlContext.Provider value={{ API_URL }}>
             {children}
@@ -61,9 +65,11 @@ export const AppsContext = (props) => {
 
     const [applications, setApplications] = useState([])
     const [statusChng, setStatusChng] = useState(false)
+    const [tabs, setTabs] = useState('pending')
 
 
-    return <ApplicationContext.Provider value={{ applications, setApplications, setStatusChng, statusChng}}>
+
+    return <ApplicationContext.Provider value={{ applications, setApplications, setStatusChng, statusChng, tabs, setTabs }}>
         {props.children}
     </ApplicationContext.Provider>
 }

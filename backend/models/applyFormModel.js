@@ -84,7 +84,11 @@ const applicationFormSchema = new Schema({
         type: Types.ObjectId,
         default: null
     },
-    slotNumber: {
+    allotedDay:{
+        type:Date,
+        default:null
+    },
+    slotSection: {
         type: String,
         default: null
     }
