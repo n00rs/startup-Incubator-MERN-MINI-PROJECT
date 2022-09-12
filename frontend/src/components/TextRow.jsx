@@ -1,4 +1,3 @@
-import React from 'react'
 
 const TextRow = ({ style, title, field, logo }) => {
     return (

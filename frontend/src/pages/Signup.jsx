@@ -8,8 +8,7 @@ import Header from "../components/Header/Header";
 const Signup = () => {
     const navigate = useNavigate()
     const { userExist } = useContext(authContext)
-
-    console.log(userExist);
+    
     useEffect(() => {
       userExist ? navigate('/') : navigate('/signup')
     

@@ -1,6 +1,5 @@
 import * as yup from 'yup'
 
-
 //signup validation
 export const signupSchema = yup.object().shape({
     name: yup.string().required("please enter a name").matches('^[a-zA-Z ]+$', "please enter a valid name"),
@@ -23,32 +22,29 @@ export const loginSchema = yup.object().shape({
 export const applicationSchema = yup.object().shape({
     address: yup.string()
         .required('please enter your address')
-        .min(5, 'please enter a valid address')
-        .max(30, 'not more than 30 chahraters'),
+        .matches('^(?:.{5,30})[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$','please enter a valid address b/w 5 to 30 chars'),
+
 
     companyName: yup.string()
         .required('please enter your company name')
-        .min(2, 'please enter a valid name more than 2 characters')
-        .max(20, 'please enter a valid name below 20 characters or short form '),
+        .matches('^(?:.{2,30})[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$','please enter a valid company name b/w 2 to 30 chars'),
+        
 
     city: yup.string()
         .required('please enter city details')
-        .min(2, 'please enter a valid city name more than 2 charaters')
-        .max(20, 'please enter a valid city name '),
+        .matches('^(?:.{2,30})[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$','please enter a valid city b/w 2 to 30 chars'),
 
     name: yup.string()
         .required("please enter a name")
-        .matches('^[a-zA-Z ]+$', "please enter a valid name"),
+        .matches('^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$', "please enter a valid name"),
 
     state: yup.string()
         .required('please enter state')
-        .min(2, 'enter a valid state more th 2 characters')
-        .max(20, 'enter a valid state below 20 characters'),
+        .matches('^(?:.{2,30})[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$','please enter a valid State b/w 2 to 30 chars'),
+
 
     email: yup.string().required('enter your email').email('enter a valid email'),
     phone: yup.string().required('please enter your phone numer').matches('[0-9]{10}', 'please enter a 10 didgit number'),
-    // .min(10, 'please enter a valid number without country code').max(10, 'please enter a valid number without country code'),
-
     businessProposal: yup.string().required('please enter your bussiness propsal').min(10, 'atleast 10 characters'),
     companyProducts: yup.string().required('please enter your company Products').min(10, 'atleast 10 characters'),
     marketSize: yup.string().required('please enter your product Market size').min(10, 'atleast 10 characters'),

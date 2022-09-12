@@ -11,12 +11,11 @@ const Login = ({ admin }) => {
  
   useEffect(() => {
     if (admin)
-      adminExist ? navigate('/admin/dash') : navigate('/admin/login')
+      adminExist ? navigate('/admin/dash') : navigate('/admin/login')            //checking if props contain admin then check for admin  in cookie 
     else
       userExist ? navigate('/') : navigate('/login')
   }, [])
 
-  console.log(admin, 'page');
   return (
     <>
       <Header admin={admin} />

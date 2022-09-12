@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken")
 
 const verifyToken = async (req, res, next) => {
-    // token = req.cookies
     try {
-        const cookie = req.headers.cookie
+        //TOKEN from cookie
         const token = req.cookies.userToken
         if (!token) {
             res.status(403)
@@ -15,13 +14,9 @@ const verifyToken = async (req, res, next) => {
                 res.status(401)
                 throw new Error('invalid token')
             }
-            console.log(user);
-            req.userId = user.id
+            req.userId = user.id    //setting userId got from token in req
             next()
         })
-        // const token =  
-
-
     } catch (err) {
         const statusCode = res.statusCode ? res.statusCode : 500
         res.status(statusCode).json(err.message)
@@ -41,9 +36,8 @@ const verifyAdminToken = (req, res, next) => {
             next()
         })
     } catch (err) {
-        console.log(err)
-        res.status(500).json(err.message)
-
+        const statusCode = res.statusCode ? res.statusCode : 500
+        res.status(statusCode).json(err.message)
     }
 }
-module.exports = {verifyToken , verifyAdminToken}
+module.exports = {verifyToken , verifyAdminToken} 

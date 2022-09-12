@@ -1,25 +1,17 @@
 import axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext,  useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { loginSchema, } from '../../validations/signupValid'
+import { loginSchema, } from '../../validations/validation'
 import '../signup/Signup.scss'
 import Spinner from '../spinner/Spinner'
-import { Cookies, useCookies } from "react-cookie";
 import { authContext, urlContext } from '../../context/context'
-
-const API_URL = '/api/users/'
+import { Container } from 'react-bootstrap'
 
 const LoginForm = ({ admin }) => {
 
-    if (admin) {
-
-        console.log(admin, 'admin');
-    }
     const navigate = useNavigate()
-
-
-    const { userExist, setUserExist, setAdminExist } = useContext(authContext)
+    const { setUserExist, setAdminExist } = useContext(authContext)
     const { API_URL } = useContext(urlContext)
 
     const initialState = {
@@ -40,17 +32,17 @@ const LoginForm = ({ admin }) => {
             }
         ))
     }
-    const url = admin ? API_URL.adminLogin : API_URL.userLogin
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault()
-
+        
         try {
             const loginValidate = await loginSchema.validate(userData, { abortEarly: false })
-
             if (loginValidate) {
                 setIsLoading(true)
-
+                
+                const url = admin ? API_URL.adminLogin : API_URL.userLogin
                 const loginApi = await axios.post(url, loginValidate)
 
                 if (loginApi.data.login) {
@@ -65,10 +57,9 @@ const LoginForm = ({ admin }) => {
                 }
             }
         } catch (err) {
-            console.log(err, 'error loginvalid');
             if (err.errors)
                 err.errors.map(error => toast.error(error))
-            if (err.name == 'AxiosError') {
+            if (err.name === 'AxiosError') {
                 setIsLoading(false)
                 toast.error(err.response.data)
             }
@@ -80,8 +71,8 @@ const LoginForm = ({ admin }) => {
     }
 
     return (
-        <>
-            <div className="login-box">
+        <Container className='p-5 mt-5'>
+        <div className="login-box mt-5 p-5">
                 <div className="login-box-formbox">
                     {admin ? ('') : (
 
@@ -125,7 +116,7 @@ const LoginForm = ({ admin }) => {
                 </div>) : ('')}
 
             </div>
-        </>
+        </Container>
 
     )
 }

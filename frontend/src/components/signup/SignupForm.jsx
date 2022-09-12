@@ -1,19 +1,17 @@
 // import { json } from 'body-parser'
 import axios from 'axios'
 import { useContext, useState } from 'react'
+import { Container } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { authContext, urlContext } from '../../context/context'
-import { signupSchema } from '../../validations/signupValid'
+import { urlContext } from '../../context/context'
+import { signupSchema } from '../../validations/validation'
 import Spinner from '../spinner/Spinner'
 import './Signup.scss'
 
 const SignupForm = () => {
     const navigate = useNavigate()
-    const { setState, state } = useContext(authContext)
     const { API_URL } = useContext(urlContext)
-
-    // console.log(setState, state);
     const [isLoading, setIsLoading] = useState(false)
     const initialState = {
         name: '',
@@ -24,7 +22,6 @@ const SignupForm = () => {
     const [userData, setUserData] = useState(initialState)
     const { name, email, password, confirmPassword } = userData
     const getUserData = (e) => {
-
         setUserData(prev => (
             {
                 ...prev,
@@ -41,6 +38,9 @@ const SignupForm = () => {
             const signupValidate = await signupSchema.validate(userData, { abortEarly: false })
             if (signupValidate) {
                 setIsLoading(true)
+
+                //sending API request to backend for signing up new user
+                
                 const signupApi = await axios.post(API_URL.userSignup, signupValidate)
                 if (signupApi.data.signup) {
                     setIsLoading(false)
@@ -51,41 +51,21 @@ const SignupForm = () => {
                     toast.error('oppos server busy')
                 }
             }
-            // signupSchema.validate(userData, { abortEarly: false }).then((res) => {
-            //     const { email, name, password } = res
-            //     setIsLoading(true)
-            //     userSignup({ email, name, password }).then((res) => {
-            // setIsLoading(false)
-            // navigate('/login')
-            //     }).catch((err) => {
-            //         console.log(err);
-            //         setIsLoading(false)
-            //         setUserData(initialState)
-            //         toast.error(err.message)
-            //     })
-
-            // }).catch(err => {
-            //     console.log(err)
-            //     err.errors.map(error => toast.error(error))
-            // })
-
         } catch (err) {
-            console.log(err);
             if (err.errors) err.errors.map(e => toast.error(e))
-            if (err.name == 'AxiosError') {
+            if (err.name === 'AxiosError') {
                 setIsLoading(false)
                 toast.error(err.response.data)
             }
-
         }
     }
 
-    if (isLoading) {
-        return <Spinner />
-    }
+    if (isLoading) <Spinner />
+
     return (
-        <>
-            <div className="login-box ">
+        
+        <Container className='p-5 mt-5'>
+            <div className="login-box mt-5 p-5">
                 <div className="login-box-formbox">
                     <div className="login-box-signup">
                         Already have an account? <Link to="/login">Login</Link>
@@ -129,7 +109,7 @@ const SignupForm = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </Container>
     )
 }
 

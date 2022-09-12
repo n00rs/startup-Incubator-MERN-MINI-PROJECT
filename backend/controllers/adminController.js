@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken")
-// const { default: SlotModal } = require("../../frontend/src/components/admin/SlotModal")
 const Application = require("../models/applyFormModel")
 const slots = require('../models/slotModel')
 
@@ -10,6 +9,7 @@ module.exports = {
     //ROUTE /api/admin/login
 
     adminLogin: (req, res) => {
+
         const adminEmail = process.env.ADMIN_EMAIL
         const adminPassword = process.env.ADMIN_PASSWORD
         try {
@@ -24,6 +24,9 @@ module.exports = {
                     req.cookies.adminToken = ''
 
                 const token = jwt.sign({ email: adminEmail }, process.env.JWT_SECRET, { expiresIn: '1d' })
+
+                //same as USER login create tokn and save in cooki
+
                 res
                     .cookie('adminToken', token, {
                         path: '/',
@@ -38,14 +41,11 @@ module.exports = {
                     })
                 res.status(200).json({ login: true })
             } else {
-
                 res.status(403)
                 throw new Error('id or password doesnt match')
 
             }
-
         } catch (err) {
-            console.log(err + 'err admin login');
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(err.message)
         }
@@ -56,14 +56,13 @@ module.exports = {
 
     fetchAllApplication: async (req, res, next) => {
         try {
-            const fecthAllApps = (await Application.find({}))
 
+            const fecthAllApps = (await Application.find({}))
             await (!fecthAllApps) ?
                 res.status(404).json({ message: "no data please login and try again" }) :
                 res.status(200).json({ fecthAllApps })
-
+                
         } catch (err) {
-            console.log(err, 'err in admin view all');
             res.status(500).json(err.message)
         }
     },
@@ -77,17 +76,16 @@ module.exports = {
             const { status } = req.body
 
             if (!status) res.status(400).json({ message: "no status no update" })
+
             const updateStatus = await Application.findByIdAndUpdate(appId,
                 {
                     $set: { status: status }
                 }, {
                 new: true
             })
-            // console.log(updateStatus)
             updateStatus ? res.status(200).json({ updated: true, updateStatus }) :
                 res.status(500).json({ message: "server down please try again late" })
         } catch (err) {
-            console.log(err, 'err in admin view all');
             res.status(500).json(err.message)
         }
     },
@@ -120,12 +118,11 @@ module.exports = {
 
             const slotDay = new Date(date)
             const newSlot = await slots.create({ section, slotDay })
-            console.log(newSlot);
+            
             if (newSlot) {
                 res.status(201).json({ slotAdded: true, newSlot })
             }
         } catch (err) {
-            console.log(err);
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(err.message)
         }
@@ -140,7 +137,6 @@ module.exports = {
             availSlots ? res.status(200).json(availSlots) :
                 res.status(404).json({ message: 'cant find any available slots' })
         } catch (error) {
-            console.log(error);
             res.status(500).json(error.message)
         }
     },
@@ -150,43 +146,36 @@ module.exports = {
 
     allotSlot: async (req, res, next) => {
         try {
-            console.log(req.body);
             const { applicationId, slotId } = req.body
             if (!applicationId || !slotId) {
                 res.status(400)
                 throw new Error('no details no updation')
             }
-            const selectedSlot = await slots.findByIdAndUpdate(slotId,
-                {
+            const selectedSlot = await slots.findByIdAndUpdate(slotId,{
                     $set: {
                         appId: applicationId,
                         bookingStatus: true
                     }
                 }, { new: true })
-            console.log(selectedSlot);
- 
-                const updateApplication = await Application.findByIdAndUpdate(selectedSlot.appId,
-                    {
-                        $set: {
-                            status: 'Slot Alloted',
-                            slotId: selectedSlot._id,
-                            slotSection: selectedSlot.section,
-                            allotedDay:selectedSlot.slotDay
-                        }
-                    },
-                    { new: true })
-            
-            console.log(updateApplication);
+
+            const updateApplication = await Application.findByIdAndUpdate(selectedSlot.appId,
+                {
+                    $set: {
+                        status: 'Slot Alloted',
+                        slotId: selectedSlot._id,
+                        slotSection: selectedSlot.section,
+                        allotedDay: selectedSlot.slotDay
+                    }
+                },
+                { new: true })
             if (selectedSlot && updateApplication) {
                 res.status(200).json({ slotAlloted: true })
             } else {
                 res.status(400)
                 throw new Error('please check the details')
             }
-            // res.status(200)
         } catch (e) {
-            console.log(e);
-            const statusCode =res.statusCode ? res.statusCode : 500
+            const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(e.message)
         }
     }

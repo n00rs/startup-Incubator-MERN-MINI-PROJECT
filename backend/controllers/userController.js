@@ -4,9 +4,6 @@ const User = require('../models/userModel')
 const bcrypt = require('bcryptjs')
 const Application = require('../models/applyFormModel')
 const multer = require('multer')
-// const upload = multer({dest: '../../frontend/public/images/companyLogo'}).single('companyLogo')
-// const av = require('../../frontend/public/images/companyLogo') 
-
 
 const Storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -14,7 +11,6 @@ const Storage = multer.diskStorage({
         cb(null, './frontend/public/images/companyLogo')
     },
     filename: (req, file, cb) => {
-        console.log(req.file, file);
         cb(null, file.originalname)
     }
 })
@@ -31,20 +27,21 @@ module.exports = {
                 res.status(400)
                 throw new Error('invalid signup credentials')
             }
+
+            //checking whether the email already registerd 
+
             const userExist = await User.findOne({ email: email })
-            console.log(userExist);
+
             if (userExist) {
                 res.status(422)
                 throw new Error(`user already exists please login !`)
             }
 
-            const hashPassword = bcrypt.hashSync(password)
+            const hashPassword = bcrypt.hashSync(password)                             //hashing password and saving new user
             const newUser = new User({ name, email, password: hashPassword })
             await newUser.save()
-            res.status(200).json({signup:true, newUser })
-
+            res.status(200).json({ signup: true, newUser })
         } catch (err) {
-            console.log(err + 'error in signup');
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode)
             res.json(err.message)
@@ -55,9 +52,7 @@ module.exports = {
     //ROUTE /api/users/login
 
     userLogin: async (req, res, next) => {
-
         try {
-
             const { email, password } = req.body
             if (!email || !password) {
                 res.status(400)
@@ -66,12 +61,12 @@ module.exports = {
 
             //verify user
             const checkUser = await User.findOne({ email: email })
-            console.log(checkUser)
             if (checkUser && bcrypt.compareSync(password, checkUser.password)) {
 
+                //creating new jwt token for userAUTH 
                 const token = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
 
-                console.log(token);
+                //saving the token in HTTPONLY cookie
                 res
                     .cookie(
                         'userToken', token, {
@@ -81,7 +76,7 @@ module.exports = {
                         sameSite: 'lax',
                         withCredentials: true
                     })
-                    .cookie('tokenExist', true, {
+                    .cookie('tokenExist', true, {                                           //ceating and saving A Boolean with same validity of token in cookie which can be accessed from frontend
                         path: '/',
                         expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
                         sameSite: 'lax',
@@ -93,7 +88,6 @@ module.exports = {
                 throw new Error('email or password doesnt match')
             }
         } catch (err) {
-            console.log(err + 'err in login')
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(err.message)
         }
@@ -110,7 +104,6 @@ module.exports = {
                 throw new Error('no token no authorization')
             }
             const user = await User.findById(userId, '-password')
-            console.log(user)
             if (!user) {
                 res.status(404)
                 throw new Error('user not found')
@@ -122,14 +115,10 @@ module.exports = {
         }
     },
 
-
-
     //METHOD POST 
     //ROUTE /api/user/apply
 
-
     newApplication: async (req, res, next) => {
-
         try {
             const userId = req.userId
             const userExist = await User.findById(userId)
@@ -137,7 +126,6 @@ module.exports = {
                 res.status(422)
                 throw new Error('no user please login or signup')
             }
-            console.log(req.body);
             const data = { ...req.body }
 
             //setting user Details
@@ -167,18 +155,17 @@ module.exports = {
 
             let applicationData = { userDetails, companyDetails }
             const newApplication = await Application.create(applicationData)
-            res.status(201).json({  formSubmitted:true })
+            res.status(201).json({ formSubmitted: true })
 
         } catch (err) {
             const statusCode = res.statusCode ? res.statusCode : 500
-            res.status(statusCode)
-            res.json(err.message)
+            res.status(statusCode).json(err.message)
         }
     },
 
     //METHOD GET
     //ROUTE /api/users/view-application/:id
-
+    //NOT USED
     viewApplication: async (req, res, next) => {
         try {
             let applicationId = req.params.id
@@ -190,7 +177,6 @@ module.exports = {
                 res.status(404)
                 throw new Error('no data found')
             }
-
         } catch (err) {
             const statusCode = res.statusCode ? res.statusCode : 500
             res.status(statusCode).json(err.message)
@@ -222,35 +208,13 @@ module.exports = {
 
     logout: (req, res, next) => {
         try {
-            
-            // //clearing token from cookies
+             //clearing token from COOKIE
 
             res.clearCookie('userToken', { path: '/' })
             res.clearCookie('tokenExist', { path: '/' })
             res.status(200).json({ logout: true })
-            
         } catch (error) {
-            console.log(error);
             res.status(500).json({ message: "failed to logout" })
         }
     }
-
 }
-
-
-    //    { "name": "jon",
-    //     "email":"jon@123",
-    //     "address":"baker Street 404",
-    //     "city": "east London",
-    //     "state":"london",
-    //     "phone": "9633138136",
-    //      "companyName": "K & K Autos",
-    //     "teamBackground": "BackStreet Boys",
-    //     "companyProducts": "small Spanners",
-    //     "solvingProblem": "fixing small problems",
-    //     "uniqueSolution": "spot fixing",
-    //     "revenueModel": "non profitable",
-    //     "marketSize": "urban to rural and stranded",
-    //     "incubationType": "physical incubationT",
-    //     "businessProposal": "share profit in future no equity"
-    //    }

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useState, useContext, useEffect } from 'react'
-import { Button, Container, Figure, Row } from 'react-bootstrap'
+import { Button, Container, Row } from 'react-bootstrap'
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { addSlotSchema } from '../../validations/signupValid';
+import { addSlotSchema } from '../../validations/validation';
 import { urlContext } from '../../context/context';
 import { toast } from 'react-toastify';
 import Spinner from '../spinner/Spinner';
@@ -30,30 +30,27 @@ const Slots = () => {
   const fetchAvailSlots = async () => {
     try {
       const response = await axios.get(API_URL.adminFetchSlots, { withCredentials: true })
-     
+
       response?.data?.length > 0 && setSlots(response.data)
     } catch (e) {
-      console.log(e);
       toast.error(e.message)
     }
   }
 
   //Adding slot 
-
   const addSlot = async (values, submitProps) => {
     try {
       const response = await axios.post(API_URL.adminAddSlot, values, { withCredentials: true })
       if (response.data.slotAdded) {
 
         //updating slots array
-        setSlots((prev => [...prev, response.data.newSlot] ))
+        setSlots((prev => [...prev, response.data.newSlot]))
 
         submitProps.setSubmitting(false)
         setSlotInput(false)
         toast.success('slot added successfully')
       }
     } catch (err) {
-      console.log(err);
       submitProps.setSubmitting(false)
       toast.error(err.message)
     }
@@ -69,7 +66,8 @@ const Slots = () => {
         <Button onClick={() => { setSlotInput(!slotInput) }}>ADD SLOT</Button>
       </div>
       {
-        slotInput ? <Row>
+        slotInput &&
+         <Row>
           <Formik
             initialValues={initialValues}
             validationSchema={addSlotSchema}
@@ -101,17 +99,13 @@ const Slots = () => {
 
                     </div>
                   </Form>
-
             }
-
-
           </Formik>
-        </Row> : ('')
+        </Row> 
       }
 
-      {slots.length > 0 ? (slots.map(slot => {
-
-        return <button style={{ width: '170px', height: '170px', margin: '10px' }}
+      {slots.length > 0 ? (slots.map(slot => 
+       <button className='slot' key={slot._id}
           onClick={() => {
             setModal({
               show: true,
@@ -119,10 +113,10 @@ const Slots = () => {
             })
           }}
         >{slot.section},{new Date(slot.slotDay).toDateString()} </button>
-
-      })
+      )
       ) : ('')}
-      <SlotModal modal={modal} setModal={setModal} setSlots ={setSlots}/>
+      
+      <SlotModal modal={modal} setModal={setModal} setSlots={setSlots} />
     </Container>
   )
 }

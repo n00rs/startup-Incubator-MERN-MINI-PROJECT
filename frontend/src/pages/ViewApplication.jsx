@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../components/Header/Header'
-import ViewApplications from '../components/table/ViewApplication'
+import ViewApplications from '../components/viewApplication/ViewApplication'
 
 const ViewApplication = () => {
 
