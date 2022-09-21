@@ -8,6 +8,7 @@ const LandingPage = () => {
     <div>
       <Header />
         <Banner imgSrc={"/images/banner.jpg"} />
+ 
         <LandingContent
          title='Startup Incubators, Defined'
           content= {`A startup incubator is a collaborative program designed to help new startups succeed. Incubators help entrepreneurs solve some of the problems commonly associated with running a startup by providing workspace, seed funding, mentoring, and training (see list below for a a more extensive list of common incubator services). The sole purpose of a startup incubator is to help entrepreneurs grow their business.
@@ -20,6 +21,7 @@ const LandingPage = () => {
 
       `} 
           imgSrc = '/images/landingContent.jpg'/>
+        
         <LandingContent 
         title='Virtual Incubation Program for Women Entrepreneurs' 
         content='StepUp Ventures (TSUV) offers all possible institutional support for start-ups incubated with them:

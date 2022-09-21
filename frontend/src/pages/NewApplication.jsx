@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { useEffect } from 'react'
 import {  useNavigate } from 'react-router-dom'
 import ApplicationForm from '../components/applicationForm/ApplicationForm'
-// import ApplicationForm from '../components/ApplicationForm'
 import Header from '../components/Header/Header'
 import { authContext } from '../context/context'
 
